@@ -1,0 +1,35 @@
+{% extends 'product_hunt/base.html' %}
+
+{% block content %}
+<div class="row mt-2">
+    <div class="col-md-12 text-center no-padding-left-lg no-padding-right-lg">
+          {% for message in messages %}
+              <div class="text-center alert alert-{% if message.level == 40 %}danger{% else %}{{message.tags}}{% endif %}" role="alert" id="message-container">
+                {{ message }}
+              </div>
+          {% endfor %}
+     </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12 post-side-margin-sm">
+        <div class="row bg-white border border-muted p-3 mb-2">
+            <div class="col-12 padding-left-lg-20p padding-right-lg-20p">
+                <h3>Sign In</h3><hr>
+                <p class="text-danger">{{ error }}</p>
+                <form class="form" method="POST">
+                    {% csrf_token %}
+                    Username:
+                    <input type="text" class="form-control mb-2" name="username" />
+                    Password :
+                    <input type="password" class="form-control mb-2" name="password" />
+                    <input class="btn btn-primary" type="submit" value="Sign In" />
+                    <a href="{% url 'password_reset' %}" class='ml-3 no-text-decoration'>Forgot Password</a>
+                </form><hr>
+                Need an Account? <a href="{% url 'register_page' %}" class="no-text-decoration">Register Here</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
