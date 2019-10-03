@@ -1,0 +1,95 @@
+{% extends 'product_hunt/base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="mt-2 border border-muted">
+<div class="bg-white">
+  <div class="container py-5">
+    <div class="row h-100 align-items-center py-5">
+      <div class="col-lg-6">
+        <h1 class="display-4 custom-logo text-stroke">Product<sup><small class="logo-sub">Hunt</small></sup></h1>
+        <p class="lead text-muted mb-0">
+            Hey there, welcome to our website. Product hunt is online platform where you can buy and sell stuff at exciting prices.
+            You can start selling products through affiliate marketing, buy refurbished products from other sellers.
+        </p>
+
+        <p class="lead text-muted mt-3">Thanks for Visiting Us !</p>
+      </div>
+      <div class="col-lg-6 d-none d-lg-block"><img src="{% static 'img/placeholder/about-page-banner-image.jpg' %}" alt="" class="img-fluid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-light py-5">
+  <div class="container py-5">
+    <div class="row mb-4">
+      <div class="col-lg-12 text-center">
+        <h2 class="display-4 font-weight-light">Our team</h2>
+        <p class="font-italic text-muted">Meet our hard working team who is behind making of this excellent project. We are here to help
+          you understand our product better.
+        </p>
+      </div>
+    </div>
+
+    <div class="row text-center">
+      <!-- Team item-->
+      <div class="col-xl-3 col-sm-6 mb-5">
+        <div class="bg-white rounded shadow-sm py-5 px-4"><img src="{% static 'img/placeholder/daenerys.png' %}" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <h5 class="mb-0">Daenerys Targaryen</h5><span class="small text-uppercase text-muted">Graphic Designer</span>
+          <ul class="social mb-0 list-inline mt-3">
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-facebook"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-github"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-linkedin"></i></a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- End-->
+
+      <!-- Team item-->
+      <div class="col-xl-3 col-sm-6 mb-5">
+        <div class="bg-white rounded shadow-sm py-5 px-4"><img src="{% static 'img/placeholder/jon_snow.jpg' %}" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <h5 class="mb-0">Jon Snow</h5><span class="small text-uppercase text-muted">Software Developer</span>
+          <ul class="social mb-0 list-inline mt-3">
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-facebook"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-github"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-linkedin"></i></a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- End-->
+
+      <!-- Team item-->
+      <div class="col-xl-3 col-sm-6 mb-5">
+        <div class="bg-white rounded shadow-sm py-5 px-4"><img src="{% static 'img/placeholder/dipesh_parab.jpg' %}" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <h5 class="mb-0">Dipesh Parab</h5><span class="small text-uppercase text-muted">Software Developer</span>
+          <ul class="social mb-0 list-inline mt-3">
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-facebook"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-github"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-linkedin"></i></a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- End-->
+
+      <!-- Team item-->
+      <div class="col-xl-3 col-sm-6 mb-5">
+        <div class="bg-white rounded shadow-sm py-5 px-4"><img src="{% static 'img/placeholder/tyrion_lannister.jpg' %}" alt="" width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <h5 class="mb-0">Tyrion Lannister</h5><span class="small text-uppercase text-muted">Quality Analyst</span>
+          <ul class="social mb-0 list-inline mt-3">
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-facebook"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-twitter"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-github"></i></a></li>
+            <li class="list-inline-item"><a href="#" class="social-link"><i class="fa fa-linkedin"></i></a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- End-->
+    </div>
+  </div>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,245 @@
+{% extends 'product_hunt/base.html' %}
+{% load staticfiles %}
+{% load mathfilters %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="row mt-2">
+    <div class="col-md-12 text-center no-padding-left-lg no-padding-right-lg">
+          {% for message in messages %}
+              <div class="text-center alert alert-{{ message.tags }}" role="alert" id="message-container">
+                {{ message }}
+              </div>
+          {% endfor %}
+     </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-10 post-side-margin-sm">
+        <div class="row no-margin-left-sm">
+            <div class="col-md-6 pl-0 mb-2">
+                <b>Recent Products
+                    {% if product_list.paginator.count > 0 %}
+                    <small class="font-bold">
+                        ({{ first_item_number }}
+                        -
+                            {% if page_size|mul:product_list.number > product_list.paginator.count %}
+                                {{ product_list.paginator.count }}
+                            {% else %}
+                                {{ page_size|mul:product_list.number }}
+                            {% endif %}
+                        of
+                        {{ product_list.paginator.count }})
+                    </small>
+                    {% endif %}
+                </b>
+            </div>
+
+            <div class="col-md-6 pr-0">
+                <nav class="float-right">
+                 {% if product_list.paginator.count > page_size and product_list.paginator.count > 0 %}
+                  <!---------------- Pagination Start ----------------------->
+                  <ul class="pagination pagination-sm">
+                    {% if product_list.has_previous %}
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page=1">
+                              <i class="fa fa-angle-double-left font-bold"></i>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.previous_page_number }}" tabindex="-1">
+                              <i class="fa fa-angle-left"></i>
+                          </a>
+                        </li>
+                    {% endif %}
+
+                    <!-------------------------- Page Number Start --------------------------->
+                    {% for page in product_list.paginator.page_range %}
+                      {% if page == product_list.number %}
+                        <li class="page-item disabled">
+                            <a class="page-link text-dark bg-custom font-bold" href="#">
+                                {{ page }}
+                            </a>
+                        </li>
+                      {% else %}
+                        <li class="page-item"><a class="page-link text-dark" href="?page={{ page }}">{{ page }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    <!-------------------------- Page Number End ------------------------------>
+
+                    {% if product_list.has_next %}
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.next_page_number }}">
+                              <i class="fa fa-angle-right"></i>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.paginator.num_pages }}">
+                              <i class="fa fa-angle-double-right font-bold"></i>
+                          </a>
+                        </li>
+                    {% endif %}
+                  </ul>
+                  {% endif %}
+                  <!---------------- Pagination End ----------------------->
+
+                </nav>
+            </div>
+        </div>
+
+        {% if product_list.paginator.count > 0 %}
+        {% for product in product_list %}
+        <div class="row bg-white border border-muted p-3 mb-2">
+            <div class="col-md-1 mt-1 mb-4">
+                {% if product.hunter.profile.profile_image %}
+                    <img src="{{ product.hunter.profile.profile_image.url }}" class="img img-responsive comment-section-user-icon">
+                {% else %}
+                    <span class="comment-section-text-icon text-dark text-uppercase pt-2">{{ product.hunter|make_list|first}}</span>
+                {% endif %}
+            </div>
+            <div class="col-md-11">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h2><a href="{% url 'product_details_page' product.id %}" class="no-text-decoration text-dark">{{product.title}}</a></h2>
+                        <span class="fa fa-clock-o mr-1"></span>
+                        <small>
+                            <i>Posted by <b>{{product.hunter}}</b> on <b>{{product.pub_date}}</b></i>
+                        </small>
+                    </div>
+                    {% if user.is_authenticated %}
+                    <div class="col-md-3 pl-0">
+                        <div class="row mt-2 d-flex justify-content-end">
+                            <div class="pl-0 mb-2 mr-3">
+                                 <span class="fa fa-thumbs-up text-success" title="Like"></span>
+                                 <b class="font-small">{{product.likes.count}}</b>
+                            </div>
+                            <div class="pl-0 mb-2 mr-3">
+                                <span class="fa fa-thumbs-down text-danger" title="Disike"></span>
+                                <b class="font-small">{{product.dislikes.count}}</b>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div><hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="text-justify">{{ product.body|safe|truncatewords:"50" }}
+                            <a href="{% url 'product_details_page' product.id %}" class="no-text-decoration">read more</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="row bg-white border border-muted p-3 mb-2">
+            <div class="col text-center no-products">
+                <h1>No Products Posted</h1>
+            </div>
+        </div>
+        {% endif %}
+
+
+
+        <div class="row no-margin-left-sm">
+            <div class="col-md-12 pr-0">
+                <nav class="float-right">
+                {% if product_list.paginator.count > page_size and product_list.paginator.count > 0 %}
+                  <!---------------- Pagination Start ----------------------->
+                  <ul class="pagination pagination-sm">
+                    {% if product_list.has_previous %}
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page=1">
+                              <i class="fa fa-angle-double-left font-bold"></i>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.previous_page_number }}" tabindex="-1">
+                              <i class="fa fa-angle-left"></i>
+                          </a>
+                        </li>
+                    {% endif %}
+
+                    <!-------------------------- Page Number Start --------------------------->
+                    {% for page in product_list.paginator.page_range %}
+                      {% if page == product_list.number %}
+                        <li class="page-item disabled">
+                            <a class="page-link text-dark bg-custom font-bold" href="#">
+                                {{ page }}
+                            </a>
+                        </li>
+                      {% else %}
+                        <li class="page-item"><a class="page-link text-dark" href="?page={{ page }}">{{ page }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    <!-------------------------- Page Number End ------------------------------>
+
+                    {% if product_list.has_next %}
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.next_page_number }}">
+                              <i class="fa fa-angle-right"></i>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.paginator.num_pages }}">
+                              <i class="fa fa-angle-double-right font-bold"></i>
+                          </a>
+                        </li>
+                    {% endif %}
+                  </ul>
+                {% else %}
+                {% endif %}
+                  <!---------------- Pagination End ----------------------->
+
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="bg-white border border-mute p-2">
+        <h5 class="mb-2 font-bold">Post Filter</h5><hr class="mb-0">
+            <small class="font-bold">Sort By</small>
+            <select class="form form-control mb-4">
+                <option value="">All</option>
+                <option value="">This Week</option>
+                <option value="">This Month</option>
+                <option value="">Likes</option>
+            </select>
+
+            {% if searchbox_needed %}
+            <div>
+                <form method="get" class="form" id="search-filter">
+                {{ search_filter.form|crispy }}
+                <button class="btn btn-primary btn-sm" type="submit">Search</button>
+                </form>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="bg-white border border-mute p-2 mt-2">
+            <h5 class="font-bold">Featured Users</h5><hr class="p-0">
+            <ul class="list-group">
+                <li class="list-group-item font-small px-2">
+                    Dipesh Parab<span class="badge badge-success float-right">1st</span>
+                </li>
+
+
+                <li class="list-group-item font-small px-2">
+                    Lavu Palav<span class="badge badge-info float-right">2nd</span>
+                </li>
+
+                <li class="list-group-item font-small px-2">
+                    Yash Parab<span class="badge badge-warning float-right">3rd</span>
+                </li>
+
+                <li class="list-group-item font-small px-2">Ganesh Shirvadkar</li>
+
+                <li class="list-group-item font-small px-2">Dipesh Morye</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
