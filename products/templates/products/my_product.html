@@ -1,0 +1,233 @@
+{% extends 'product_hunt/base.html' %}
+{% load staticfiles %}
+{% load mathfilters %}
+
+{% block content %}
+<div class="row mt-2">
+    <div class="col-md-12 text-center no-padding-left-lg no-padding-right-lg">
+          {% for message in messages %}
+              <div class="text-center alert alert-{{ message.tags }}" role="alert" id="message-container">
+                {{ message }}
+              </div>
+          {% endfor %}
+     </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-3 mb-2">
+        <div class="bg-white border border-mute p-2">
+            {% if user.profile.profile_image %}
+            <img class="col-md-12 border border-muted px-0" src="{{user.profile.profile_image.url}}">
+            {% else %}
+            <img class="col-md-12 border border-muted px-0" src="{% static 'img/default-avatar.jpg' %}">
+            {% endif %}
+            <h3 class="font-bold text-center mt-2">{{user.first_name}} {{user.last_name}}</h3><hr>
+            <p class="mb-1">Username : <small class="font-bold">{{user.username}}</small></p>
+            <p class="mb-1">Email : <small class="font-bold">{{user.email}}</small></p>
+            <p class="mb-1">Contact : <small class="font-bold">{{user.profile.contact_number}}</small></p>
+            <p class="mb-1">Total Posts : <small class="font-bold">{{product_list.paginator.count}}</small></p><hr>
+
+            User Bio :
+            <p class="mb-1 text-justify"><small class="font-bold">{{user.profile.user_bio}}</small></p><hr>
+
+            <p class="ml-4">
+                <i class="fa fa-facebook-square"></i>
+                <a href="{{user.profile.facebook_link}}" target="_blank" class="font-bold font-small text-dark no-text-decoration ml-2">
+                    View Facebook Profile
+                </a>
+            </p>
+            <p class="ml-4">
+                <i class="fa fa-instagram"></i>
+                <a href="{{user.profile.instagram_link}}" target="_blank" class="font-bold font-small text-dark no-text-decoration ml-2">
+                    View Instagram Profile
+                </a>
+            </p>
+            <p class="ml-4">
+                <i class="fa fa-twitter-square"></i>
+                <a href="{{user.profile.twitter_link}}" target="_blank" class="font-bold font-small text-dark no-text-decoration ml-2">
+                    View Twitter Profile
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <div class="col-md-9 post-side-margin-sm">
+        <div class="row no-margin-left-sm">
+            <div class="col-md-6 pl-0 mb-2">
+                <b>My Products
+                    <small class="font-bold">
+                        ({{ first_item_number }}
+                        -
+                            {% if page_size|mul:product_list.number > product_list.paginator.count %}
+                                {{ product_list.paginator.count }}
+                            {% else %}
+                                {{ page_size|mul:product_list.number }}
+                            {% endif %}
+                        of
+                        {{ product_list.paginator.count }})
+                    </small>
+                </b>
+            </div>
+
+            <div class="col-md-6 pr-0">
+                <nav class="float-right">
+                 {% if product_list.paginator.count > page_size %}
+                  <!---------------- Pagination Start ----------------------->
+                  <ul class="pagination pagination-sm">
+                    {% if product_list.has_previous %}
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page=1">
+                              <i class="fa fa-angle-double-left font-bold"></i>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.previous_page_number }}" tabindex="-1">
+                              <i class="fa fa-angle-left"></i>
+                          </a>
+                        </li>
+                    {% endif %}
+
+                    <!-------------------------- Page Number Start --------------------------->
+                    {% for page in product_list.paginator.page_range %}
+                      {% if page == product_list.number %}
+                        <li class="page-item disabled">
+                            <a class="page-link text-dark bg-custom font-bold" href="#">
+                                {{ page }}
+                            </a>
+                        </li>
+                      {% else %}
+                        <li class="page-item"><a class="page-link text-dark" href="?page={{ page }}">{{ page }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    <!-------------------------- Page Number End ------------------------------>
+
+                    {% if product_list.has_next %}
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.next_page_number }}">
+                              <i class="fa fa-angle-right"></i>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.paginator.num_pages }}">
+                              <i class="fa fa-angle-double-right font-bold"></i>
+                          </a>
+                        </li>
+                    {% endif %}
+                  </ul>
+                  {% else %}
+                  {% endif %}
+                  <!---------------- Pagination End ----------------------->
+
+                </nav>
+            </div>
+        </div>
+
+        {% for product in product_list %}
+        <div class="row bg-white border border-muted p-3 mb-2">
+            <div class="col-md-1 mt-1">
+                {% if product.icon %}
+                    <img src="{{ product.icon.url }}" class="img img-responsive product-icon">
+                {% else %}
+                    <img src="{% static 'img/no_image.jpg' %}" class="img img-responsive product-icon">
+                {% endif %}
+            </div>
+            <div class="col-md-11">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h2><a href="{% url 'my_product_details_page' product.id %}" class="no-text-decoration text-dark">{{product.title}}</a></h2>
+                        <span class="fa fa-clock-o mr-1"></span>
+                        <small>
+                            <i>Posted by <b>{{product.hunter}}</b> on <b>{{product.pub_date}}</b></i>
+                        </small>
+                    </div>
+                    {% if user.is_authenticated %}
+                    <div class="col-md-3 pl-0">
+                        <div class="row mt-2 text-center">
+                            <div class="col-md-3 pl-0 mb-2">
+                                 <a href="#" class="no-text-decoration" title="Like">
+                                    <span class="fa fa-thumbs-up text-success"></span>
+                                </a><b class="font-small">{{ product.likes.count }}</b>
+                            </div>
+                            <div class="col-md-3 pl-0 mb-2">
+                                <a href="#" class="no-text-decoration" title="Dislike">
+                                    <span class="fa fa-thumbs-down text-danger"></span>
+                                </a> <b class="font-small">{{product.dislikes.count}}</b>
+                            </div>
+                            <div class="col-md-3 pl-0 mb-2">
+                                <div class="fb-share-button" data-href="ProductHunt website address" data-layout="button" data-size="small">
+                                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div><hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="text-justify">{{ product.body|safe|truncatewords:"50" }}
+                            <a href="{% url 'product_details_page' product.id %}" class="no-text-decoration">read more</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="row no-margin-left-sm">
+            <div class="col-md-12 pr-0">
+                <nav class="float-right">
+                {% if product_list.paginator.count > page_size %}
+                  <!---------------- Pagination Start ----------------------->
+                  <ul class="pagination pagination-sm">
+                    {% if product_list.has_previous %}
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page=1">
+                              <i class="fa fa-angle-double-left font-bold"></i>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.previous_page_number }}" tabindex="-1">
+                              <i class="fa fa-angle-left"></i>
+                          </a>
+                        </li>
+                    {% endif %}
+
+                    <!-------------------------- Page Number Start --------------------------->
+                    {% for page in product_list.paginator.page_range %}
+                      {% if page == product_list.number %}
+                        <li class="page-item disabled">
+                            <a class="page-link text-dark bg-custom font-bold" href="#">
+                                {{ page }}
+                            </a>
+                        </li>
+                      {% else %}
+                        <li class="page-item"><a class="page-link text-dark" href="?page={{ page }}">{{ page }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    <!-------------------------- Page Number End ------------------------------>
+
+                    {% if product_list.has_next %}
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.next_page_number }}">
+                              <i class="fa fa-angle-right"></i>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link text-dark" href="?page={{ product_list.paginator.num_pages }}">
+                              <i class="fa fa-angle-double-right font-bold"></i>
+                          </a>
+                        </li>
+                    {% endif %}
+                  </ul>
+                {% else %}
+                {% endif %}
+                  <!---------------- Pagination End ----------------------->
+
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
