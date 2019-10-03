@@ -71,14 +71,17 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 
-    #Database connection setting for Mysql
+    #Database connection setting for Mysql in case you want to user MySQL
+    #For more information read Django MySQL Documentation on Django Website 
+    #Link: https://docs.djangoproject.com/en/2.2/ref/databases/
+
     # 'default': {
     #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'SAmA9950Mf',
-    #     'USER': 'SAmA9950Mf',
-    #     'PASSWORD': 'j3s6SfElNa',
-    #     'HOST': 'remotemysql.com',
-    #     'PORT': '3306'
+    #     'NAME': '',
+    #     'USER': '',
+    #     'PASSWORD': '',
+    #     'HOST': '',
+    #     'PORT': ''
     # }
 }
 
@@ -107,8 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-# TIME_ZONE = 'UTC'
-TIME_ZONE = 'Asia/Kolkata'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -139,8 +141,11 @@ LOGOUT_REDIRECT_URL = 'home_page'
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.mail.yahoo.com'
+EMAIL_HOST = 'smtp.mail.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'testuser5893@yahoo.com'
-EMAIL_HOST_PASSWORD = 'D!pe5h###'
+EMAIL_HOST_USER = ''  		#Add user gmail or any other email server username
+EMAIL_HOST_PASSWORD = ''	#Add password
+
+#Note: Try to save EMAIL_HOST_USER and EMAIL_HOST_PASSWORD as system environmental variables then access those here.
+#So that if you share this code then your email username and passowrd will be safe. 
